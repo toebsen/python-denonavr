@@ -1,4 +1,0 @@
-denon:
-    host: 192.168.2.25    
-    port: 23
-    timeout: 5
