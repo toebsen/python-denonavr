@@ -1,0 +1,9 @@
+[Unit]
+Description=Denon AVR Server
+
+[Service]
+ExecStart=/usr/local/bin/denonavr_server
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
