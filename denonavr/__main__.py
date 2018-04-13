@@ -3,6 +3,7 @@ import argparse
 
 from flask import Flask, jsonify, request, abort
 import yaml
+import logging
 
 
 CONFIG = {
@@ -45,13 +46,15 @@ def execute(command, config=CONFIG):
     """
     try:
         tn = telnetlib.Telnet(config["host"], config["port"], config["timeout"])
-    except:
+    except Exception as e:
+        logging.error("Exception occured: %r" % e)
         return "ERROR"
 
     try:
         tn.write(("%s\r" % command).encode("ascii"))
         return str(tn.read_until(("\r").encode('ascii'))).replace("b'", "").replace("\\r'", "")
     except:
+        logging.error("Exception occured: %r" % e)
         return "ERROR"
     finally:
         tn.close()
