@@ -45,8 +45,14 @@ def execute(command, config=CONFIG):
     """
     try:
         tn = telnetlib.Telnet(config["host"], config["port"], config["timeout"])
+    except:
+        return "ERROR"
+
+    try:
         tn.write(("%s\r" % command).encode("ascii"))
         return str(tn.read_until(("\r").encode('ascii'))).replace("b'", "").replace("\\r'", "")
+    except:
+        return "ERROR"
     finally:
         tn.close()
 
