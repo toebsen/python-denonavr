@@ -4,7 +4,7 @@ setup(
     name='denonavr',
     version='1.0.0',
     description='Communicate with an Denon AVR X1000 via telnet over a network.',
-    #url='https://github.com/happyleavesaoc/python-firetv/',
+    url='https://github.com/toebsen/python-denonavr',
     license='MIT',
     author='toebsen',
     author_email='toebsen@hotmail.com',
