@@ -29,7 +29,7 @@ Copy the denonavr.service file to /etc/systemd/system/. Modify the ExecStart pat
     systemctl stop denonavr.service    # Stop server
 
 # Routes
-All routes return JSON.
+All routes return JSON. 
 
 ## Power
 - GET */power/state* - will return the current power state
@@ -40,7 +40,7 @@ All routes return JSON.
 - GET */volume/set/<int:level_id>* - set the current volume (*level_id* is in DB)
 ## Input Source
 - GET */input/state* - returns the current input source
-- GET */input/switch/<source_id> - will switch to the given source (*source_id* is one of "dvd", "bd, "game", "satcbl")
+- GET */input/switch/<source_id>* - will switch to the given source (*source_id* is one of "dvd", "bd, "game", "satcbl")
 
 
 inspired by https://github.com/happyleavesaoc/python-firetv
