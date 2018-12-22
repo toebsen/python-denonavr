@@ -37,10 +37,10 @@ All routes return JSON.
 - GET */power/turnoff* - will turn off the device
 ## Volume
 - GET */volume/level* - get the current volume level
-- GET */volume/set/<int:level_id>* - set the current volume (level_id is in DB)
+- GET */volume/set/<int:level_id>* - set the current volume (*level_id* is in DB)
 ## Input Source
 - GET */input/state* - returns the current input source
-- GET */input/switch/<source_id> - will switch to the given source (source one of "dvd", "bd, "game", "satcbl")
+- GET */input/switch/<source_id> - will switch to the given source (*source_id* is one of "dvd", "bd, "game", "satcbl")
 
 
 inspired by https://github.com/happyleavesaoc/python-firetv
