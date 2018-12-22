@@ -54,9 +54,10 @@ def execute(command, config):
         return str(tn.read_until("\r".encode('ascii'))).replace("b'", "").replace("\\r'", "")
     except OSError:
         logging.exception("Exception occurred during writing of telnet")
+        return "ERROR"
     finally:
         tn.close()
-        return "ERROR"
+        
 
 
 @app.route('/power/state', methods=['GET'])
