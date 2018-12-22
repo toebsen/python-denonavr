@@ -21,19 +21,26 @@ It includes `denonavr_server`, an HTTP server to facilitate RESTful access to a 
 ```
     docker run --rm -p 5567:5567 toebsen/python-denonavr:latest
 ```
+# Running
+Copy the denonavr.service file to /etc/systemd/system/. Modify the ExecStart path and arguments as necessary.
 
-# Current Features:
+    systemctl enable denonavr.service  # Enable on boot
+    systemctl start denonavr.service   # Start server
+    systemctl stop denonavr.service    # Stop server
+
+# Routes
+All routes return JSON.
+
 ## Power
-- get current power state via url/power/state
-- turnOn via url/power/turnon
-- turnOff via url/power/turnoff
+- GET */power/state* - will return the current power state
+- GET */power/turnon* - will turn on the device
+- GET */power/turnoff* - will turn off the device
 ## Volume
-- get current volume via url/volume/level
-- set  volume via url/set/<int:level>  e.g. http://192.168.2.241:12345/volume/set/40 will set the AVR to 40DB
+- GET */volume/level* - get the current volume level
+- GET */volume/set/<int:level_id>* - set the current volume (level_id is in DB)
 ## Input Source
-- get current input source via url/input/state
-- set input source via url/input/switch/<source_id> e.g. http://192.168.2.241:12345/input/switch/dvd
-- source has to be one of ["DVD", "BD", "GAME", "SAT/CBL"]
+- GET */input/state* - returns the current input source
+- GET */input/switch/<source_id> - will switch to the given source (source one of "dvd", "bd, "game", "satcbl")
 
 
 inspired by https://github.com/happyleavesaoc/python-firetv
