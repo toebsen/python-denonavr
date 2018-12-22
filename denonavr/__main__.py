@@ -162,7 +162,7 @@ def _read_config(config_file_path):
 def main():
     """ Set up the server. """
     parser = argparse.ArgumentParser(description='AVR Telnet Server')
-    parser.add_argument('-p', '--port', type=int, help='listen port', default=12345)
+    parser.add_argument('-p', '--port', type=int, help='listen port', default=5557)
     parser.add_argument('-c', '--config', type=str, help='config')
     args = parser.parse_args()
 
