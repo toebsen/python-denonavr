@@ -32,8 +32,7 @@ class TestDenonAVR(unittest.TestCase):
             telnet_mock.side_effect = None
             telnet_mock.return_value.write.side_effect = OSError
             self.assertEqual(avr.execute("CMD", avr.CONFIG), "ERROR")
-            telnet_mock.return_value.close.assert_called()
-
+            telnet_mock.return_value.close.assert_called_with()
 
 if __name__ == '__main__':
     unittest.main()
