@@ -25,7 +25,7 @@ class TestDenonAVR(unittest.TestCase):
 
     def test_execute_error(self):
         with unittest.mock.patch("telnetlib.Telnet") as telnet_mock:
-            telnet_mock.side_effect = OSError
+            telnet_mock.return_value.write.side_effect = OSError
             self.assertEqual(avr.execute("CMD", avr.CONFIG), "ERROR")
 
             telnet_mock.return_value = unittest.mock.MagicMock(spec=["write", "read_until", "close"])
