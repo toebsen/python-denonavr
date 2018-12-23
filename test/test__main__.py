@@ -21,7 +21,7 @@ class TestDenonAVR(unittest.TestCase):
             telnet_mock.return_value.read_until.return_value = "b'Test\\r'"
             self.assertEqual(avr.execute("?Test", avr.CONFIG), "Test")
             telnet_mock.return_value.write.assert_called_once_with(b'?Test\r')
-            telnet_mock.return_value.close.assert_called_once()
+            telnet_mock.return_value.close.assert_called_once_with()
 
     def test_execute_error(self):
         with unittest.mock.patch("telnetlib.Telnet") as telnet_mock:
