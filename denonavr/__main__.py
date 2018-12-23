@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""This module provides state information and some control of an
+`Denon AVR X1000` device over a network connection."""
+
 import argparse
 import logging
 import telnetlib
@@ -11,13 +16,12 @@ CONFIG = {
     "timeout": 5
 }
 
-app = Flask(__name__)
-
+APP = Flask(__name__)
 
 def _is_valid_input_source(source):
     """Only allow special sources.
 
-    :param source: 
+    :param (str) source: name of source
     :return:
     """
     return source in ["DVD", "BD", "GAME", "SAT/CBL"]
@@ -39,28 +43,26 @@ def _convert_input_source(source):
 def execute(command, config):
     """Execute telnet commands on DENON host.
 
-    :param command: see https://www.denon.de/de/product/homecinema/avreceiver/avrx1200w?docname=Steuerungsprotokoll_IP_RS232C_AVR-X1200W_AVR-X2200W_AVR-X3200W_AVR-X4200W.pdf
-    :param config:
-    :return:
+    :param (str) command: see public protocol
+    :param (dict) config: device config
+
+    :return: result from avr telnet connection.
     """
-    try:
-        tn = telnetlib.Telnet(config["host"], config["port"], config["timeout"])
-    except Exception as e:
-        logging.error("Exception occurred: %r" % e)
-        return "ERROR"
+    tn_con = telnetlib.Telnet(config["host"], config["port"], config["timeout"])
 
     try:
-        tn.write(("%s\r" % command).encode("ascii"))
-        return str(tn.read_until("\r".encode('ascii'))).replace("b'", "").replace("\\r'", "")
+        tn_con.write(("%s\r" % command).encode("ascii"))
+        read = str(tn_con.read_until("\r".encode('ascii')))
+        read = read.replace("b'", "").replace("\\r'", "")
+        return read
+
     except OSError:
         logging.exception("Exception occurred during writing of telnet")
         return "ERROR"
     finally:
-        tn.close()
-        
+        tn_con.close()
 
-
-@app.route('/power/state', methods=['GET'])
+@APP.route('/power/state', methods=['GET'])
 def get_power_state():
     """Get current power state.
 
@@ -69,7 +71,7 @@ def get_power_state():
     return jsonify(power=execute("PW?", CONFIG))
 
 
-@app.route('/power/turnon', methods=['GET'])
+@APP.route('/power/turnon', methods=['GET'])
 def turn_on():
     """Turn on System.
 
@@ -77,11 +79,10 @@ def turn_on():
     """
     if execute("PW?", CONFIG) == "PWON":
         return jsonify(power="PWON")
-    else:
-        return jsonify(power=execute("PWON", CONFIG))
+    return jsonify(power=execute("PWON", CONFIG))
 
 
-@app.route('/power/turnoff', methods=['GET'])
+@APP.route('/power/turnoff', methods=['GET'])
 def turn_off():
     """Turn off System.
 
@@ -89,11 +90,10 @@ def turn_off():
     """
     if execute("PW?", CONFIG) == "PWSTANDBY":
         return jsonify(power="PWSTANDBY")
-    else:
-        return jsonify(power=execute("PWSTANDBY", CONFIG))
+    return jsonify(power=execute("PWSTANDBY", CONFIG))
 
 
-@app.route('/input/state', methods=['GET'])
+@APP.route('/input/state', methods=['GET'])
 def get_input_state():
     """ Get current Input Source.
 
@@ -102,7 +102,7 @@ def get_input_state():
     return jsonify(power=execute("SI?", CONFIG))
 
 
-@app.route('/input/switch/<source_id>', methods=['GET'])
+@APP.route('/input/switch/<source_id>', methods=['GET'])
 def switch_input_source(source_id):
     """Set new Input Source.
 
@@ -126,7 +126,7 @@ def switch_input_source(source_id):
     return jsonify(succes=success)
 
 
-@app.route('/volume/level', methods=['GET'])
+@APP.route('/volume/level', methods=['GET'])
 def get_volume_level():
     """Get the volume level on volume/level.
 
@@ -135,7 +135,7 @@ def get_volume_level():
     return jsonify(level=execute("MV?", CONFIG).replace("MV", ""))
 
 
-@app.route('/volume/set/<int:level_id>', methods=['GET'])
+@APP.route('/volume/set/<int:level_id>', methods=['GET'])
 def set_volume_level(level_id):
     """Set Volume level on /volume/set/*.
 
@@ -155,22 +155,20 @@ def _read_config(config_file_path):
     config_file = open(config_file_path, 'r')
     config = yaml.load(config_file)
     config_file.close()
-    print(CONFIG)
     CONFIG = config["denon"]
-    print(CONFIG)
-
 
 def main():
-    """ Set up the server. """
+    """ Set up the server."""
     parser = argparse.ArgumentParser(description='AVR Telnet Server')
-    parser.add_argument('-p', '--port', type=int, help='listen port', default=5557)
+    parser.add_argument('-p', '--port', type=int,
+                        help='listen port', default=5557)
     parser.add_argument('-c', '--config', type=str, help='config')
     args = parser.parse_args()
 
     if args.config:
         _read_config(args.config)
 
-    app.run(host='0.0.0.0', port=args.port)
+    APP.run(host='0.0.0.0', port=args.port)
 
 
 if __name__ == '__main__':
