@@ -1,0 +1,7 @@
+.cache/v/cache/lastfailed
+*.pyc
+*/__pycache__/*
+.cache/v/cache/lastfailed
+.vscode/settings.json
+.vscode/launch.json
+.cache/v/cache/lastfailed
