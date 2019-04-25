@@ -1,4 +1,8 @@
+
 [![Build Status](https://travis-ci.com/toebsen/python-denonavr.svg?branch=master)](https://travis-ci.com/toebsen/python-denonavr.svg?branch=master)
+
+[![Coverage Status](https://coveralls.io/repos/github/toebsen/python-denonavr/badge.svg?branch=master)](https://coveralls.io/github/toebsen/python-denonavr?branch=master)
+
 
 # python-denonavr
 
